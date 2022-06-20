@@ -16,14 +16,11 @@ server.post("/sign-up", (request, response) => {
 })
 
 server.post("/tweets", (request, response) => {
-    console.log( request.header);
     const tweet = request.body.tweet;
     const user  = request.header("user");
     const avatar = users.find((u) => u.username === user).avatar;
     tweets.push({ username: user, avatar, tweet });
     response.status(201).send("OK");
-    console.log(user, tweet, avatar);
-
 })
 
 server.get("/tweets", (request, response) => {
