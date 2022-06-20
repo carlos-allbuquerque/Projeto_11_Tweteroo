@@ -12,29 +12,29 @@ let tweets = [];
 
 server.post("/sign-up", (request, response) => {
     users.push(request.body)
-    response.send(users)
+    response.status(201).send("OK");
 })
 
 server.post("/tweets", (request, response) => {
     console.log( request.header);
     const tweet = request.body.tweet;
     const user  = request.header("user");
-    
-    let avatar = "";
-    let isThere = users.find((u) => u.username === user);
-    if (isThere) {
-        avatar = isThere.avatar;
-    }
+    const avatar = users.find((u) => u.username === user).avatar;
     tweets.push({ username: user, avatar, tweet });
     response.status(201).send("OK");
-    response.send(avatar);
     console.log(user, tweet, avatar);
 
 })
 
 server.get("/tweets", (request, response) => {
     console.log(tweets);
-    response.send(tweets.reverse());
+    if (tweets.length <= 10) {
+        response.status(201).send(tweets.reverse());
+    } 
+    if (tweets.length > 10) {
+        response.status(201).send([...tweets].reverse().slice(0, 10))
+    }
+    
 })
 
 server.listen(5000);
